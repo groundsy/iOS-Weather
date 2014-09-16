@@ -8,6 +8,7 @@
 
 #import "WXController.h"
 #import <LBBlurredImage/UIImageView+LBBlurredImage.h>
+#import "WXManager.h"
 
 @interface WXController ()
 
@@ -119,6 +120,8 @@
     iconView.contentMode = UIViewContentModeScaleAspectFit;
     iconView.backgroundColor = [UIColor clearColor];
     [header addSubview:iconView];
+    
+    [[WXManager sharedManager] findCurrentLocation];
 }
 
 - (UIStatusBarStyle)preferredStatusBarStyle
