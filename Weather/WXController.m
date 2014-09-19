@@ -134,6 +134,18 @@
          iconView.image = [UIImage imageNamed:[newCondition imageName]];
      }];
     
+    // Assign returned value from the signal to the text key of the jiloLabel
+    RAC(hiloLabel, text) = [[RACSignal combineLatest:@[
+                            // Observe the high and low temperatures of the currentCondition key.
+                            RACObserve([WXManager sharedManager], currentCondition.tempHigh),
+                            RACObserve([WXManager sharedManager], currentCondition.tempLow)]
+                            // Reduce the values from the combined signals into a single value.
+                                              reduce:^(NSNumber *hi, NSNumber *low) {
+                                                  return [NSString stringWithFormat:@"%.0f° / %.0f°", hi.floatValue, low.floatValue];
+                                              }]
+                            // Deliver everything to the main thread.
+                            deliverOn:RACScheduler.mainThreadScheduler];
+    
     [[WXManager sharedManager] findCurrentLocation];
 }
 
